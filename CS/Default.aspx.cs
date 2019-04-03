@@ -11,8 +11,7 @@ public partial class _Default: System.Web.UI.Page {
         get {
             var key = "34FAA431-CF79-4869-9488-93F6AAE81263";
             if (!IsPostBack || Session[key] == null)
-                Session[key] = Enumerable.Range(1, 3).Select(i => new GridDataItem
-                {
+                Session[key] = Enumerable.Range(1, 50).Select(i => new GridDataItem {
                     ID = i,
                     Mon = i * 10 % 3,
                     Tue = i * 5 % 3,
