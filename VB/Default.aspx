@@ -33,16 +33,13 @@
             var dif = isDeleting ? -newValue : newValue - originalValue;
             labelSum.SetValue((parseInt(labelSum.GetValue()) + dif));
         }
+
         function OnBatchEditRowDeleting(s, e) {
             var total = 0;
-            for (var key in e.rowValues) {
-                var columnFieldName = s.GetColumn(key).fieldName;
-                if (columnFieldName == "Total")
-                    continue;
-                var label = ASPxClientControl.GetControlCollection().GetByName('label' + columnFieldName);
+            _iterateRowValues(s, e, function (label, columnFieldName) {
                 CalculateSummary(s, label, e.rowValues, e.visibleIndex, columnFieldName, true);
                 total += parseInt(label.GetValue());
-            }
+            });
             labelTotal.SetText(total);
         }
         function OnChangesCanceling(s, e) {
@@ -51,39 +48,96 @@
                     s.Refresh();
                 }, 0);
         }
+
+
+        function OnBatchEditRowRecovering(s, e) {
+            var total = 0;
+            _iterateRowValues(s, e, function (label, fn) {
+                var columnTotal = parseInt(label.GetValue()) + e.rowValues[(s.GetColumnByField(fn).index)].value;
+                label.SetValue(columnTotal);
+                total += parseInt(label.GetValue());
+            });
+            labelTotal.SetText(total);
+        }
+        function _iterateRowValues(s, e, f) {
+            for (var key in e.rowValues) {
+                var columnFieldName = s.GetColumn(key).fieldName;
+                if (columnFieldName == "Total")
+                    continue;
+                var label = ASPxClientControl.GetControlCollection().GetByName('label' + columnFieldName);
+                f(label, columnFieldName);
+            }
+        }
+        var dict = [];
+        function OnEndCallback(s, e) {
+            if (dict.length == 0) return;
+            _iterateColumns(s, e, function (label, fn) {
+                var v = dict.find(x => x.name === 'label' + fn).value;
+                label.SetValue(v);
+            });
+        }
+        function OnBeginCallback(s, e) {
+            dict = []
+            if (e.command == ASPxClientGridViewCallbackCommand.UpdateEdit || e.command == ASPxClientGridViewCallbackCommand.Refresh) return;
+            _iterateColumns(s, e, function (label, fn) {
+                dict.push({
+                    name: 'label' + fn,
+                    value: label.GetValue()
+                });
+            });
+        }
+        function _iterateColumns(s, e, f) {
+            for (j = 0; j < s.GetColumnCount() ; j++) {
+                var columnFieldName = s.GetColumn(j).fieldName;
+                var label = ASPxClientControl.GetControlCollection().GetByName('label' + columnFieldName);
+                if (label) {
+                    f(label, columnFieldName);
+                }
+            }
+        }
     </script>
 </head>
 <body>
     <form id="frmMain" runat="server">
-        <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="ID" Width="600" OnBatchUpdate="Grid_BatchUpdate"
+              <dx:ASPxGridView ID="Grid" runat="server" KeyFieldName="ID" Width="600" OnBatchUpdate="Grid_BatchUpdate"
             OnRowInserting="Grid_RowInserting" OnRowUpdating="Grid_RowUpdating" OnRowDeleting="Grid_RowDeleting"
             OnCustomUnboundColumnData="Grid_CustomUnboundColumnData" OnHtmlDataCellPrepared="Grid_HtmlDataCellPrepared"
             ClientInstanceName="gridView">
-            <ClientSideEvents BatchEditChangesCanceling="OnChangesCanceling" BatchEditRowDeleting="OnBatchEditRowDeleting" BatchEditStartEditing="OnBatchEditStartEditing" BatchEditEndEditing="OnBatchEditEndEditing" />
+            <ClientSideEvents BatchEditChangesCanceling="OnChangesCanceling"
+                BatchEditRowRecovering="OnBatchEditRowRecovering"
+                BatchEditRowDeleting="OnBatchEditRowDeleting"
+                BatchEditStartEditing="OnBatchEditStartEditing"
+                BeginCallback="OnBeginCallback"
+                EndCallback="OnEndCallback"
+                BatchEditEndEditing="OnBatchEditEndEditing" />
             <Columns>
                 <dx:GridViewCommandColumn ShowNewButtonInHeader="true" ShowDeleteButton="true"></dx:GridViewCommandColumn>
                 <dx:GridViewDataSpinEditColumn FieldName="Mon">
                     <PropertiesSpinEdit MinValue="0" MaxValue="9999"></PropertiesSpinEdit>
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelMon" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'></dx:ASPxLabel>
+						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelMon" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataSpinEditColumn>
                 <dx:GridViewDataSpinEditColumn FieldName="Tue">
                     <PropertiesSpinEdit MinValue="0" MaxValue="9999"></PropertiesSpinEdit>
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTue" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'></dx:ASPxLabel>
+						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTue" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataSpinEditColumn>
                 <dx:GridViewDataSpinEditColumn FieldName="Wen">
                     <PropertiesSpinEdit MinValue="0" MaxValue="9999"></PropertiesSpinEdit>
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelWen" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'></dx:ASPxLabel>
+						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelWen" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataSpinEditColumn>
                 <dx:GridViewDataTextColumn FieldName="Total" UnboundType="Decimal" ReadOnly="true">
                     <Settings ShowEditorInBatchEditMode="false" />
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTotal" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'></dx:ASPxLabel>
+						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTotal" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataTextColumn>
             </Columns>

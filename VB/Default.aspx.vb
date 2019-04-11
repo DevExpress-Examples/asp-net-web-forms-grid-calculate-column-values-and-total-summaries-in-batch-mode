@@ -15,7 +15,7 @@ Partial Public Class _Default
 		Get
 			Dim key = "34FAA431-CF79-4869-9488-93F6AAE81263"
 			If Not IsPostBack OrElse Session(key) Is Nothing Then
-				Session(key) = Enumerable.Range(1, 3).Select(Function(i) New GridDataItem With {
+				Session(key) = Enumerable.Range(1, 50).Select(Function(i) New GridDataItem With {
 					.ID = i,
 					.Mon = i * 10 Mod 3,
 					.Tue = i * 5 Mod 3,
