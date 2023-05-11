@@ -5,7 +5,7 @@
 <!-- default badges end -->
 # Grid View for ASP.NET Web Forms - How to calculate values and update total summaries dynamically in batch edit mode
 <!-- run online -->
-**[[Run Online]](https://codecentral.devexpress.com/t116925/)**
+**[[Run Online]](https://codecentral.devexpress.com/128532799/)**
 <!-- run online end -->
 
 This example demonstrates how to create an unbound column that changes its values based on other column values and replace summary items with custom footer templates to calculate total summaries dynamically in batch edit mode. This example combines the following approaches:
