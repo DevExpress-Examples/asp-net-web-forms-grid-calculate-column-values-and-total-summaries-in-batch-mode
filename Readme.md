@@ -11,7 +11,7 @@ This example demonstrates how to create an unbound column that changes its value
 
 ## Overview
 
-Follow the steps below to calculate column values and update total summaries on the client in batch edti mode:
+Follow the steps below to calculate column values and update total summaries on the client in batch edit mode:
 
 1. Add total summary items for the corresponding columns. Use the item's [Tag](https://docs.devexpress.com/AspNet/DevExpress.Web.ASPxSummaryItemBase.Tag) property to identify the summary item and get its value.
 
