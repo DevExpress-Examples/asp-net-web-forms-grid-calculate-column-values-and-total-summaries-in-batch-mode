@@ -11,7 +11,7 @@
 <!-- default file list end -->
 # ASPxGridView - Batch Edit - How to calculate unbound column and total summary values on the fly
 <!-- run online -->
-**[[Run Online]](https://codecentral.devexpress.com/t116925/)**
+**[[Run Online]](https://codecentral.devexpress.com/128532799/)**
 <!-- run online end -->
 
 
