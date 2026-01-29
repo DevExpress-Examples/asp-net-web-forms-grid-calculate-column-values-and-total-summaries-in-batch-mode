@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="true" CodeFile="Default.aspx.vb" Inherits="_Default" %>
+<%@ Page Language="VB" AutoEventWireup="true" CodeFile="Default.aspx.vb" Inherits="_Default" %>
 
 <%@ Register Assembly="DevExpress.Web.v18.2, Version=18.2.18.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a"
     Namespace="DevExpress.Web" TagPrefix="dx" %>
@@ -115,28 +115,28 @@
                 <dx:GridViewDataSpinEditColumn FieldName="Mon">
                     <PropertiesSpinEdit MinValue="0" MaxValue="9999"></PropertiesSpinEdit>
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelMon" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        <dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelMon" Text='<%# GetSummaryValue((Container.Column as GridViewDataColumn).FieldName) %>'>
                         </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataSpinEditColumn>
                 <dx:GridViewDataSpinEditColumn FieldName="Tue">
                     <PropertiesSpinEdit MinValue="0" MaxValue="9999"></PropertiesSpinEdit>
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTue" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        <dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTue" Text='<%# GetSummaryValue((Container.Column as GridViewDataColumn).FieldName) %>'>
                         </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataSpinEditColumn>
                 <dx:GridViewDataSpinEditColumn FieldName="Wen">
                     <PropertiesSpinEdit MinValue="0" MaxValue="9999"></PropertiesSpinEdit>
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelWen" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        <dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelWen" Text='<%# GetSummaryValue((Container.Column as GridViewDataColumn).FieldName) %>'>
                         </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataSpinEditColumn>
                 <dx:GridViewDataTextColumn FieldName="Total" UnboundType="Decimal" ReadOnly="true">
                     <Settings ShowEditorInBatchEditMode="false" />
                     <FooterTemplate>
-						<dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTotal" Text='<%#GetSummaryValue((TryCast(Container.Column, GridViewDataColumn)).FieldName)%>'>
+                        <dx:ASPxLabel ID="ASPxLabel1" runat="server" ClientInstanceName="labelTotal" Text='<%# GetSummaryValue((Container.Column as GridViewDataColumn).FieldName) %>'>
                         </dx:ASPxLabel>
                     </FooterTemplate>
                 </dx:GridViewDataTextColumn>
